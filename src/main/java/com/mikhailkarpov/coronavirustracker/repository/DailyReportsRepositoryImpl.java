@@ -50,9 +50,9 @@ public class DailyReportsRepositoryImpl implements DailyReportsRepository {
     private void createOrUpdateReport(Map<String, DailyReport> reportPerCountry, CSVRecord record) {
         try {
             String country = record.get("Country/Region");
-            int confirmed = Integer.parseInt(record.get("Confirmed"));
-            int deaths = Integer.parseInt(record.get("Deaths"));
-            int recovered = Integer.parseInt(record.get("Recovered"));
+            int confirmed = parseRecord(record, "Confirmed");
+            int deaths = parseRecord(record, "Deaths");
+            int recovered = parseRecord(record, "Recovered");
             LOGGER.debug("New record: " + country + "(confirmed, deaths, recovered):" + confirmed +", " + deaths + ", " + recovered);
 
             DailyReport report = reportPerCountry.get(country);
@@ -73,6 +73,16 @@ public class DailyReportsRepositoryImpl implements DailyReportsRepository {
 
         } catch (IllegalArgumentException e) {
             LOGGER.error("Failed to parse record: " + record);
+        }
+    }
+
+    private int parseRecord(CSVRecord record, String header) {
+        String value = record.get(header);
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            LOGGER.debug("No value is present for " + record);
+            return 0;
         }
     }
 
