@@ -1,4 +1,4 @@
-package com.mikhailkarpov.coronavirustracker.contrller;
+package com.mikhailkarpov.coronavirustracker.controller;
 
 import com.mikhailkarpov.coronavirustracker.dto.DailyReport;
 import com.mikhailkarpov.coronavirustracker.service.DailyReportsService;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 

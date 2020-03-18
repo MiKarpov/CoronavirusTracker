@@ -1,4 +1,4 @@
-package com.mikhailkarpov.coronavirustracker.contrller;
+package com.mikhailkarpov.coronavirustracker.controller;
 
 import com.mikhailkarpov.coronavirustracker.dto.DailyReport;
 import com.mikhailkarpov.coronavirustracker.service.DailyReportsService;
