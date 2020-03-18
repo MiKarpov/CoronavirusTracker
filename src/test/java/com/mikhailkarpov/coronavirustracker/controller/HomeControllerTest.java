@@ -1,7 +1,8 @@
 package com.mikhailkarpov.coronavirustracker.controller;
 
-import com.mikhailkarpov.coronavirustracker.dto.DailyReport;
-import com.mikhailkarpov.coronavirustracker.service.DailyReportsService;
+import com.mikhailkarpov.coronavirustracker.dto.Report;
+import com.mikhailkarpov.coronavirustracker.service.ReportsService;
+import com.sun.tools.javac.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,8 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -25,7 +24,7 @@ class HomeControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private DailyReportsService service;
+    private ReportsService service;
     @Autowired
     private HomeController controller;
 
@@ -36,21 +35,20 @@ class HomeControllerTest {
 
     @Test
     public void shouldReturnHomePage() throws Exception {
-        DailyReport report1 = new DailyReport();
+        LocalDate now = LocalDate.now();
+
+        Report report1 = new Report("China", now);
         report1.setConfirmed(11);
         report1.setDeaths(12);
         report1.setRecovered(13);
 
-        DailyReport report2 = new DailyReport();
+        Report report2 = new Report("US", now);
         report2.setConfirmed(21);
         report2.setDeaths(22);
         report2.setRecovered(23);
 
-        Map<String, DailyReport> reports = new HashMap<>();
-        reports.put("China", report1);
-        reports.put("US", report2);
+        List<Report> reports = List.of(report1, report2);
 
-        LocalDate now = LocalDate.now();
         when(service.getLastUpdate()).thenReturn(now);
         when(service.getLastReports()).thenReturn(reports);
 

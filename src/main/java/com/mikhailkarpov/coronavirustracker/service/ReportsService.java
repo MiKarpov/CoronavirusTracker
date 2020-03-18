@@ -1,7 +1,7 @@
 package com.mikhailkarpov.coronavirustracker.service;
 
-import com.mikhailkarpov.coronavirustracker.dto.DailyReport;
-import com.mikhailkarpov.coronavirustracker.repository.DailyReportsRepository;
+import com.mikhailkarpov.coronavirustracker.dto.Report;
+import com.mikhailkarpov.coronavirustracker.repository.ReportsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +11,16 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
 
 @Service
-public class DailyReportsService {
+public class ReportsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DailyReportsService.class);
-    private final DailyReportsRepository repository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportsService.class);
+    private final ReportsRepository repository;
 
     @Autowired
-    public DailyReportsService(DailyReportsRepository repository) {
+    public ReportsService(ReportsRepository repository) {
         this.repository = repository;
     }
 
@@ -34,7 +33,7 @@ public class DailyReportsService {
             try {
                 repository.fetchData(date);
             } catch (IOException e) {
-                LOGGER.error("Fetching data failed for " + date, e);
+                LOGGER.warn("Fetching data failed for " + date, e);
             }
         }
         LOGGER.info("Data has been fetched");
@@ -50,17 +49,12 @@ public class DailyReportsService {
         }
     }
 
-    public Optional<Map<String, DailyReport>> getDailyReports(LocalDate date) {
-        return repository.getDailyReport(date);
+    public List<Report> getReports(LocalDate date) {
+        return repository.getReports(date);
     }
 
-    public Map<String, DailyReport> getLastReports() {
-        Optional<Map<String, DailyReport>> lastReport = repository.getLastDailyReport();
-        if (lastReport.isPresent()) {
-            return lastReport.get();
-        }
-        LOGGER.error("Last report is absent");
-        return null;
+    public List<Report> getLastReports() {
+        return repository.getLastReports();
     }
 
     public LocalDate getLastUpdate() {

@@ -1,10 +1,27 @@
 package com.mikhailkarpov.coronavirustracker.dto;
 
-public class DailyReport {
+import java.time.LocalDate;
 
+public class Report {
+
+    private final String country;
+    private final LocalDate date;
     private int confirmed;
     private int deaths;
     private int recovered;
+
+    public Report(String country, LocalDate date) {
+        this.country = country;
+        this.date = date;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 
     public int getConfirmed() {
         return confirmed;
