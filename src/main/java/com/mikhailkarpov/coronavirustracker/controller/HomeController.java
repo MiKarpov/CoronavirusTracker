@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
 
     private final ReportsService service;
+    private final Comparator<Report> comparatorByConfirmed = Comparator.comparingInt(Report::getConfirmed);
 
     @Autowired
     public HomeController(ReportsService service) {
@@ -21,7 +24,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        List<Report> lastReports = service.getLastReports();
+        List<Report> lastReports = service.getLastReports()
+                .stream()
+                .sorted(comparatorByConfirmed)
+                .collect(Collectors.toList());
 
         int totalConfirmed = lastReports.stream().mapToInt(Report::getConfirmed).sum();
         int totalDeaths = lastReports.stream().mapToInt(Report::getDeaths).sum();
