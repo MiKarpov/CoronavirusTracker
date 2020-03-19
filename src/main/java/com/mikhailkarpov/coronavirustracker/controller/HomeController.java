@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final ReportsService service;
-    private final Comparator<Report> comparatorByConfirmed = Comparator.comparingInt(Report::getConfirmed);
+    private final Comparator<Report> comparatorByConfirmed = Comparator.comparingInt(Report::getConfirmed).reversed();
 
     @Autowired
     public HomeController(ReportsService service) {

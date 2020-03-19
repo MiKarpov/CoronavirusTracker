@@ -7,12 +7,34 @@
 <body>
 
 <h1>COVID-19 Situation report</h1>
-<div>
+<div th:if="${lastUpdate} != null">
     <p>total confirmed <span th:text="${totalConfirmed}"/></p>
     <p>total deaths <span th:text="${totalDeaths}"/></p>
     <p>total confirmed <span th:text="${totalConfirmed}"/></p>
-    <p> latest update: <span th:text="${lastUpdate}"/></p>
+    <p>latest update: <span th:text="${lastUpdate}"/></p>
 </div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Country</th>
+            <th>Confirmed</th>
+            <th>Deaths</th>
+            <th>Recovered</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:if="${reports.empty}">
+            <td colspan="4">No data available</td>
+        </tr>
+        <tr th:each="report : ${reports}">
+            <td><span th:text="${report.country}"/></td>
+            <td><span th:text="${report.confirmed}"/></td>
+            <td><span th:text="${report.deaths}"/></td>
+            <td><span th:text="${report.recovered}"/></td>
+        </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
