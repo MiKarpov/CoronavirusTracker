@@ -47,7 +47,7 @@ class HomeControllerTest {
         report2.setDeaths(22);
         report2.setRecovered(23);
 
-        List<Report> reports = List.of(report1, report2);
+        List<Report> reports = List.of(report2, report1);
 
         when(service.getLastUpdate()).thenReturn(now);
         when(service.getLastReports()).thenReturn(reports);

@@ -5,7 +5,6 @@ import com.mikhailkarpov.coronavirustracker.repository.ReportsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,7 +25,7 @@ class ReportsServiceTest {
     }
 
     @Test
-    public void testGetLastUpdate() throws IOException {
+    public void testGetLastUpdate() {
         when(mockRepository.getLastUpdate()).thenReturn(DATE);
 
         assertEquals(DATE, service.getLastUpdate());
@@ -41,8 +40,8 @@ class ReportsServiceTest {
 
     @Test
     public void testGetReports() {
-        when(mockRepository.getReports(DATE)).thenReturn(mockReports);
+        when(mockRepository.getLastReports()).thenReturn(mockReports);
 
-        assertEquals(mockReports, service.getReports(DATE));
+        assertEquals(mockReports, service.getLastReports());
     }
 }

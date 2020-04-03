@@ -9,7 +9,6 @@ import java.util.List;
 public interface ReportsRepository {
 
     void fetchData(LocalDate date) throws IOException;
-    List<Report> getReports(LocalDate date);
     List<Report> getLastReports();
     LocalDate getLastUpdate();
 }

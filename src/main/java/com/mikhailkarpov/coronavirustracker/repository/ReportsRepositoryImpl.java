@@ -15,7 +15,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ReportsRepositoryImpl implements ReportsRepository {
@@ -25,39 +24,36 @@ public class ReportsRepositoryImpl implements ReportsRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportsRepositoryImpl.class);
 
     private LocalDate lastUpdate;
-    private Map<LocalDate, Map<String, Report>> reportsPerCountryPerDate = new ConcurrentHashMap<>();
+    private List<Report> lastReports;
 
     @Override
     public void fetchData(LocalDate date) throws IOException {
-        if (reportsPerCountryPerDate.containsKey(date)) {
-            LOGGER.debug("Report has already been fetched");
-            return;
-        }
-
         String url = URL_PATTERN + DATE_TIME_FORMATTER.format(date) + ".csv";
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
-            LOGGER.info("Parsing data for " + date);
 
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+            LOGGER.info("Parsing data for {} from {}", date, url);
             CSVParser parser = CSVParser.parse(reader, CSVFormat.DEFAULT.withHeader());
+
             Map<String, Report> reportPerCountry = new HashMap<>();
             for (CSVRecord record : parser) {
-                saveRecord(date, record, reportPerCountry);
+                parseAndSaveReport(record, date, reportPerCountry);
             }
-            reportsPerCountryPerDate.put(date, reportPerCountry);
+            lastReports = Collections.synchronizedList(new ArrayList<>(reportPerCountry.values()));
 
             if (lastUpdate == null || lastUpdate.isBefore(date)) lastUpdate = date;
         }
     }
 
-    private void saveRecord(LocalDate date, CSVRecord record, Map<String, Report> fetchedReports) {
+    private void parseAndSaveReport(CSVRecord record, LocalDate date, Map<String, Report> reportPerCountry) {
         try {
-            String country = record.get("Country/Region");
+            // Parse data
+            String country = record.get(3);
             int confirmed = parseRecord(record, "Confirmed");
             int deaths = parseRecord(record, "Deaths");
             int recovered = parseRecord(record, "Recovered");
-            LOGGER.debug("New record: " + country + "(confirmed, deaths, recovered):" + confirmed +", " + deaths + ", " + recovered);
 
-            Report report = fetchedReports.get(country);
+            // Create or update record
+            Report report = reportPerCountry.get(country);
             if (report != null) { // Data has been previously parsed for this country, but different province
                 confirmed += report.getConfirmed();
                 deaths += report.getDeaths();
@@ -69,7 +65,8 @@ public class ReportsRepositoryImpl implements ReportsRepository {
             report.setDeaths(deaths);
             report.setRecovered(recovered);
 
-            fetchedReports.put(country, report);
+            //Save or update record
+            reportPerCountry.put(country, report);
 
         } catch (IllegalArgumentException e) {
             LOGGER.error("Failed to parse record: " + record);
@@ -91,22 +88,11 @@ public class ReportsRepositoryImpl implements ReportsRepository {
     }
 
     @Override
-    public List<Report> getReports(LocalDate date) {
-        Map<String, Report> reportsPerCountry = reportsPerCountryPerDate.get(date);
-        if (reportsPerCountry == null) {
-            return Collections.emptyList();
-        }
-        Collection<Report> reports = reportsPerCountry.values();
-        return Collections.unmodifiableList(new ArrayList<>(reports));
-    }
-
-    @Override
     public List<Report> getLastReports() {
-        if (lastUpdate == null) {
+        if (lastReports == null || lastReports.isEmpty())
             return Collections.emptyList();
-        } else {
-            return getReports(lastUpdate);
-        }
+        else
+            return lastReports;
     }
 
     @Override

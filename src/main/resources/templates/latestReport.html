@@ -1,16 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Coronavirus COVID-19 Latest Data</title>
+    <title>COVID-19 Situation Report</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 
 <h1>COVID-19 Situation report</h1>
 <div th:if="${lastUpdate} != null">
-    <p>total confirmed <span th:text="${totalConfirmed}"/></p>
+    <p>total confirmed cases <span th:text="${totalConfirmed}"/></p>
     <p>total deaths <span th:text="${totalDeaths}"/></p>
-    <p>total confirmed <span th:text="${totalConfirmed}"/></p>
+    <p>total recovered <span th:text="${totalConfirmed}"/></p>
     <p>latest update: <span th:text="${lastUpdate}"/></p>
 </div>
 
@@ -18,7 +18,7 @@
     <thead>
         <tr>
             <th>Country</th>
-            <th>Confirmed</th>
+            <th>Confirmed Cases</th>
             <th>Deaths</th>
             <th>Recovered</th>
         </tr>
