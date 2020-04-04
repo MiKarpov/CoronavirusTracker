@@ -23,7 +23,6 @@ class ReportsRepositoryImplTest {
     @Test
     public void constructorShouldCreateEmptyRepository() {
         assertNull(repository.getLastUpdate());
-        assertTrue(repository.getReports(LocalDate.now()).isEmpty());
         assertTrue(repository.getLastReports().isEmpty());
     }
 
@@ -39,7 +38,7 @@ class ReportsRepositoryImplTest {
             assertEquals(DATE, report.getDate());
         }
 
-        List<Report> reports = repository.getReports(DATE);
+        List<Report> reports = repository.getLastReports();
         
         assertFalse(reports.isEmpty());
         for (Report report : reports) {

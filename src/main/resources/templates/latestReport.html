@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -11,6 +12,10 @@
             crossorigin="anonymous"
     />
     <title>COVID-19 Situation report</title>
+=======
+    <title>COVID-19 Situation Report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+>>>>>>> master
 </head>
 <body>
 <div class="container">
@@ -19,6 +24,7 @@
         <div class="text-muted"><small>updated on 20/02/2020</small></div>
     </header>
 
+<<<<<<< HEAD
     <div class="row text-center my-3" style="height: 300px; align-items: center;">
         <div class="col-sm-4 p-6">
             <h2 class="h5">Confirmed cases</h2>
@@ -35,15 +41,36 @@
             <div class="display-4 text-warning" th:text="${totalDeaths}"/>
         </div>
     </div>
+=======
+<h1>COVID-19 Situation report</h1>
+<div th:if="${lastUpdate} != null">
+    <p>total confirmed cases <span th:text="${totalConfirmed}"/></p>
+    <p>total deaths <span th:text="${totalDeaths}"/></p>
+    <p>total recovered <span th:text="${totalConfirmed}"/></p>
+    <p>latest update: <span th:text="${lastUpdate}"/></p>
+</div>
+>>>>>>> master
 
     <h3 class="my-3">Statistics</h3>
     <table class="table table-striped mb-5">
         <thead class="thead-dark">
         <tr>
+<<<<<<< HEAD
             <th class="col-4 pl-4">Country</th>
             <th class="col-2 text-center">Confirmed cases</th>
             <th class="col-2 text-center">Deaths</th>
             <th class="col-2 text-center">Recovered</th>
+=======
+            <th>Country</th>
+            <th>Confirmed Cases</th>
+            <th>Deaths</th>
+            <th>Recovered</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:if="${reports.empty}">
+            <td colspan="4">No data available</td>
+>>>>>>> master
         </tr>
         </thead>
         <tbody>

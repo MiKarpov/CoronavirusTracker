@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,17 +27,22 @@ public class ReportsService {
 
     @PostConstruct
     private void fetchData() {
-        LocalDate from = LocalDate.of(2020, 1, 22);
-        LocalDate now = LocalDate.now();
+        LocalDate from = LocalDate.now();
+        LocalDate to = LocalDate.of(2020, 1, 22);
 
-        for (LocalDate date = from; !date.isAfter(now); date = date.plusDays(1)) {
+        for (LocalDate date = from; !date.isBefore(to); date = date.minusDays(1)) {
+            LocalDate lastUpdate = repository.getLastUpdate();
+            if (lastUpdate != null)
+                return;
+
             try {
                 repository.fetchData(date);
+                LOGGER.info("Data has been fetched. Last update: " + date);
+                return;
             } catch (IOException e) {
-                LOGGER.warn("Fetching data failed for " + date, e);
+                LOGGER.warn("Fetching data failed for {}: {}", date, e.getMessage());
             }
         }
-        LOGGER.info("Data has been fetched");
     }
 
     @Scheduled(cron = "* * 1 * * *")
@@ -44,13 +50,10 @@ public class ReportsService {
         LocalDate now = LocalDate.now();
         try {
             repository.fetchData(now);
+            LOGGER.info("Updated on {}", LocalDateTime.now());
         } catch (IOException e) {
-            LOGGER.error("Data not found for " + now);
+            LOGGER.debug("Update failed. Data not found for " + now);
         }
-    }
-
-    public List<Report> getReports(LocalDate date) {
-        return repository.getReports(date);
     }
 
     public List<Report> getLastReports() {
