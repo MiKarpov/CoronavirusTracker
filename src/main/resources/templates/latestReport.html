@@ -1,40 +1,84 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Coronavirus COVID-19 Latest Data</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+    />
+    <title>COVID-19 Situation report</title>
 </head>
 <body>
+<div class="container">
+    <header class="text-center mx-auto my-3">
+        <div class="display-4 mb-1">COVID-19 Situation report</div>
+        <div class="text-muted"><small>updated on 20/02/2020</small></div>
+    </header>
 
-<h1>COVID-19 Situation report</h1>
-<div th:if="${lastUpdate} != null">
-    <p>total confirmed <span th:text="${totalConfirmed}"/></p>
-    <p>total deaths <span th:text="${totalDeaths}"/></p>
-    <p>total confirmed <span th:text="${totalConfirmed}"/></p>
-    <p>latest update: <span th:text="${lastUpdate}"/></p>
-</div>
+    <div class="row text-center my-3" style="height: 300px; align-items: center;">
+        <div class="col-sm-4 p-6">
+            <h2 class="h5">Confirmed cases</h2>
+            <div class="display-4 text-warning" th:text="${totalConfirmed}"/>
+        </div>
 
-<table>
-    <thead>
+        <div class="col-sm-4">
+            <h2 class="h5">Recovered</h2>
+            <div class="display-4 text-warning" th:text="${totalRecovered}"/>
+        </div>
+
+        <div class="col-sm-4">
+            <h2 class="h5 mb-1">Deaths</h2>
+            <div class="display-4 text-warning" th:text="${totalDeaths}"/>
+        </div>
+    </div>
+
+    <h3 class="my-3">Statistics</h3>
+    <table class="table table-striped mb-5">
+        <thead class="thead-dark">
         <tr>
-            <th>Country</th>
-            <th>Confirmed</th>
-            <th>Deaths</th>
-            <th>Recovered</th>
+            <th class="col-4 pl-4">Country</th>
+            <th class="col-2 text-center">Confirmed cases</th>
+            <th class="col-2 text-center">Deaths</th>
+            <th class="col-2 text-center">Recovered</th>
         </tr>
-    </thead>
-    <tbody>
-        <tr th:if="${reports.empty}">
-            <td colspan="4">No data available</td>
-        </tr>
+        </thead>
+        <tbody>
         <tr th:each="report : ${reports}">
-            <td><span th:text="${report.country}"/></td>
-            <td><span th:text="${report.confirmed}"/></td>
-            <td><span th:text="${report.deaths}"/></td>
-            <td><span th:text="${report.recovered}"/></td>
+            <td class="col-4 pl-4"><span th:text="${report.country}"/></td>
+            <td class="col-2 text-center"><span th:text="${report.confirmed}"/></td>
+            <td class="col-2 text-center"><span th:text="${report.deaths}"/></td>
+            <td class="col-2 text-center"><span th:text="${report.recovered}"/></td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <div class="pb-5">
+        <h3 class="my-3">About</h3>
+        <p>
+            <strong>COVID-19 Situation Report</strong> is a training project
+            exploring Spring Boot and Thymeleaf by
+            <a href="https://github.com/MiKarpov/CoronavirusTracker"
+            >Mikhail Karpov</a
+            >
+        </p>
+        <p>
+            Data provided by the
+            <a href="https://github.com/CSSEGISandData/COVID-19"
+            >Johns Hopkins University Center for Systems Science and Engineering
+                (JHU CSSE)</a
+            >. The data you see may already be outdated. Information on reported
+            cases is also available on the
+            <a
+                    href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports"
+            >World Health Organization website</a
+            >.
+        </p>
+    </div>
+</div>
 
 </body>
 </html>
