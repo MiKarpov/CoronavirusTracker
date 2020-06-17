@@ -2,7 +2,6 @@ package com.mikhailkarpov.coronavirustracker.controller;
 
 import com.mikhailkarpov.coronavirustracker.dto.Report;
 import com.mikhailkarpov.coronavirustracker.service.ReportsService;
-import com.sun.tools.javac.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -47,7 +48,7 @@ class HomeControllerTest {
         report2.setDeaths(22);
         report2.setRecovered(23);
 
-        List<Report> reports = List.of(report2, report1);
+        List<Report> reports = Arrays.asList(report2, report1);
 
         when(service.getLastUpdate()).thenReturn(now);
         when(service.getLastReports()).thenReturn(reports);
