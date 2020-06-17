@@ -56,14 +56,14 @@ public class HomeController {
     }
 
     private Comparator<Report> getComparator(Optional<String> sortBy) {
-        Comparator<Report> comparator = Comparator.comparing(Report::getCountry);
+        Comparator<Report> comparator = Comparator.comparing(Report::getConfirmed).reversed();
 
         if (!sortBy.isPresent())
             return comparator;
 
         switch (sortBy.get()) {
-            case (SORT_BY_CONFIRMED):
-                comparator = Comparator.comparing(Report::getConfirmed).reversed();
+            case (SORT_BY_COUNTRY):
+                comparator = Comparator.comparing(Report::getConfirmed);
                 break;
             case (SORT_BY_RECOVERED):
                 comparator = Comparator.comparing(Report::getRecovered).reversed();
