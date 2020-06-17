@@ -17,23 +17,23 @@
 
     <header class="text-center mx-auto my-3">
         <div class="display-4 mb-1">COVID-19 Situation report</div>
-        <div class="text-muted"><small>updated on <span th:text="${lastUpdate}"/></small></div>
+        <div class="text-muted"><small>last updated on <span th:text="${#temporals.format(lastUpdate, 'dd-MM-yyyy')}"></span></small></div>
     </header>
 
     <div class="row text-center my-3" style="height: 300px; align-items: center;">
         <div class="col-sm-4 p-6">
             <h2 class="h5">Confirmed cases</h2>
-            <div class="display-4 text-warning" th:text="${totalConfirmed}"/>
+            <div class="display-4 text-warning" th:text="${#numbers.formatDecimal(totalConfirmed, 0, 'WHITESPACE', 0, 'POINT')}"/>
         </div>
 
         <div class="col-sm-4">
             <h2 class="h5">Recovered</h2>
-            <div class="display-4 text-success" th:text="${totalRecovered}"/>
+            <div class="display-4 text-success" th:text="${#numbers.formatDecimal(totalRecovered, 0, 'WHITESPACE', 0, 'POINT')}"/>
         </div>
 
         <div class="col-sm-4">
             <h2 class="h5 mb-1">Deaths</h2>
-            <div class="display-4 text-danger" th:text="${totalDeaths}"/>
+            <div class="display-4 text-danger" th:text="${#numbers.formatDecimal(totalDeaths, 0, 'WHITESPACE', 0, 'POINT')}"/>
         </div>
     </div>
 
@@ -41,17 +41,17 @@
         <thead class="thead-dark">
         <tr>
             <th class="col-4 pl-4">Country</th>
-            <th class="col-2 text-center">Confirmed cases</th>
-            <th class="col-2 text-center">Deaths</th>
-            <th class="col-2 text-center">Recovered</th>
+            <th class="col-2 text-center text-warning">Confirmed cases</th>
+            <th class="col-2 text-center text-success">Recovered</th>
+            <th class="col-2 text-center text-danger">Deaths</th>
         </tr>
     </thead>
     <tbody>
         <tr th:each="report : ${reports}">
             <td class="col-4 pl-4"><span th:text="${report.country}"/></td>
-            <td class="col-2 text-center"><span th:text="${report.confirmed}"/></td>
-            <td class="col-2 text-center"><span th:text="${report.deaths}"/></td>
-            <td class="col-2 text-center"><span th:text="${report.recovered}"/></td>
+            <td class="col-2 text-center"><span th:text="${#numbers.formatDecimal(report.confirmed, 0, 'WHITESPACE', 0, 'POINT')}"/></td>
+            <td class="col-2 text-center"><span th:text="${#numbers.formatDecimal(report.recovered, 0, 'WHITESPACE', 0, 'POINT')}"/></td>
+            <td class="col-2 text-center"><span th:text="${#numbers.formatDecimal(report.deaths, 0, 'WHITESPACE', 0, 'POINT')}"/></td>
         </tr>
         </tbody>
     </table>
