@@ -1,4 +1,4 @@
-# COVID-19 last update
+# COVID-19 Situation Report
 
 Simple web app displaying situation report on COVID-19 confirmed cases, recovered and deaths by country.
 
