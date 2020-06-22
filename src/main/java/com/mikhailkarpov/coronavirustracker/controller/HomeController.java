@@ -20,8 +20,8 @@ public class HomeController {
     private static final String SORT_BY_CONFIRMED = "confirmed";
     private static final String SORT_BY_RECOVERED = "recovered";
     private static final String SORT_BY_DEATHS = "deaths";
-    private static final String ORDER_ASCENDING = "asc";
-    private static final String ORDER_DESCENDING = "desc";
+    private static final String ORDER_ASC = "asc";
+    private static final String ORDER_DESC = "desc";
 
     private final ReportsService service;
     private final Comparator<Report> comparatorByConfirmed = Comparator.comparingInt(Report::getConfirmed).reversed();
@@ -33,8 +33,9 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String homePage(@RequestParam Optional<String> sortBy, Model model) {
-        Comparator<Report> comparator = getComparator(sortBy);
+    public String homePage(@RequestParam Optional<String> sortBy, @RequestParam Optional<String> order, Model model) {
+        Comparator<Report> comparator = sortBy.isPresent() ? getComparator(sortBy.get(), order) :
+                Comparator.comparing(Report::getConfirmed).reversed();
 
         List<Report> lastReports = service
                 .getLastReports()
@@ -52,26 +53,41 @@ public class HomeController {
         model.addAttribute("reports", lastReports);
         model.addAttribute("lastUpdate", service.getLastUpdate());
 
+        if (sortBy.isPresent()) {
+            model.addAttribute("sortBy", sortBy.get());
+        } else {
+            model.addAttribute("sortBy", SORT_BY_CONFIRMED);
+        }
+
+        if (order.isPresent() && order.get().equals(ORDER_ASC)) {
+            model.addAttribute("order", ORDER_ASC);
+        } else {
+            model.addAttribute("order", ORDER_DESC);
+        }
+
         return "latestReport";
     }
 
-    private Comparator<Report> getComparator(Optional<String> sortBy) {
-        Comparator<Report> comparator = Comparator.comparing(Report::getConfirmed).reversed();
+    private Comparator<Report> getComparator(String sortBy, Optional<String> order) {
+        Comparator<Report> comparator;
 
-        if (!sortBy.isPresent())
-            return comparator;
-
-        switch (sortBy.get()) {
+        switch (sortBy) {
             case (SORT_BY_COUNTRY):
-                comparator = Comparator.comparing(Report::getConfirmed);
+                comparator = Comparator.comparing(Report::getCountry);
                 break;
             case (SORT_BY_RECOVERED):
-                comparator = Comparator.comparing(Report::getRecovered).reversed();
+                comparator = Comparator.comparing(Report::getRecovered);
                 break;
             case (SORT_BY_DEATHS):
-                comparator = Comparator.comparing(Report::getDeaths).reversed();
+                comparator = Comparator.comparing(Report::getDeaths);
+                break;
+            default:
+                comparator = Comparator.comparing(Report::getConfirmed);
                 break;
         }
+
+        if (order.isPresent() && order.get().equals(ORDER_DESC))
+            comparator = comparator.reversed();
 
         return comparator;
     }

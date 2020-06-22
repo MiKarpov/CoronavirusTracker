@@ -41,10 +41,34 @@
     <table class="table table-striped mb-5">
         <thead class="thead-dark">
         <tr>
-            <th class="col-4 pl-4">Country&nbsp;<a th:href="@{/(sortBy='country')}"><i class="fas fa-sort"></i></a></th>
-            <th class="col-2 text-center text-warning">Confirmed cases&nbsp;<a th:href="@{/(sortBy='confirmed')}"><i class="fas fa-sort"></i></a></th>
-            <th class="col-2 text-center text-success">Recovered&nbsp;<a th:href="@{/(sortBy='recovered')}"><i class="fas fa-sort"></i></a></th>
-            <th class="col-2 text-center text-danger">Deaths&nbsp;<a th:href="@{/(sortBy='deaths')}"><i class="fas fa-sort"></i></a></th>
+            <th class="col-4 pl-4 justify-content-between">
+                Country
+                <a th:if="${sortBy == 'country' && order == 'desc'}" th:href="@{/(sortBy='country', order='asc')}">
+                    <i class="fas fa-sort-down" style="color: white"></i></a>
+                <a th:unless="${sortBy == 'country' && order == 'desc'}" th:href="@{/(sortBy='country',order='desc')}">
+                    <i class="fas fa-sort-up" style="color: white"></i></a>
+            </th>
+            <th class="col-2 text-center text-warning">
+                Confirmed cases&nbsp;
+                    <a th:if="${sortBy == 'confirmed' && order == 'desc'}" th:href="@{/(sortBy='confirmed', order='asc')}">
+                        <i class="fas fa-sort-down text-warning"></i></a>
+                    <a th:unless="${sortBy == 'confirmed' && order == 'desc'}" th:href="@{/(sortBy='confirmed',order='desc')}">
+                        <i class="fas fa-sort-up text-warning"></i></a>
+            </th>
+            <th class="col-2 text-center text-success">
+                Recovered&nbsp;
+                <a th:if="${sortBy == 'recovered' && order == 'desc'}" th:href="@{/(sortBy='recovered', order='asc')}">
+                    <i class="fas fa-sort-down text-success"></i></a>
+                <a th:unless="${sortBy == 'recovered' && order == 'desc'}" th:href="@{/(sortBy='recovered',order='desc')}">
+                    <i class="fas fa-sort-up text-success"></i></a>
+            </th>
+            <th class="col-2 text-center text-danger">
+                Deaths&nbsp;
+                <a th:if="${sortBy == 'deaths' && order == 'desc'}" th:href="@{/(sortBy='deaths', order='asc')}">
+                    <i class="fas fa-sort-down text-danger"></i></a>
+                <a th:unless="${sortBy == 'deaths' && order == 'desc'}" th:href="@{/(sortBy='deaths',order='desc')}">
+                    <i class="fas fa-sort-up text-danger"></i></a>
+            </th>
         </tr>
     </thead>
     <tbody>
